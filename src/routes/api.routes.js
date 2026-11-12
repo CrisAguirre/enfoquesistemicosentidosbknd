@@ -14,7 +14,7 @@ const logRoutes = require('./log.routes');
 // Ruta de prueba
 router.get('/', (req, res) => {
   res.json({
-    message: 'Bienvenido a la API del Sistema Circulatorio',
+    message: 'Bienvenido a la API de Los Sentidos — Pensamiento Sistémico',
     version: '1.0.0',
     endpoints: {
       health: 'GET /health',

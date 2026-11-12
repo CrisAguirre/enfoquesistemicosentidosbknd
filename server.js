@@ -8,7 +8,7 @@ async function start() {
   await seedAdmin();
 
   app.listen(config.port, () => {
-    console.log(`\n🫀 Sistema Circulatorio API`);
+    console.log(`\n🧠 Los Sentidos — Pensamiento Sistémico API`);
     console.log(`   Servidor corriendo en: http://localhost:${config.port}`);
     console.log(`   Entorno: ${config.nodeEnv}`);
     console.log(`   CORS habilitado para: ${config.corsOrigins.join(', ')}\n`);

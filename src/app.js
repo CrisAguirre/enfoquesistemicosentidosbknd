@@ -20,7 +20,7 @@ app.use('/api', apiRoutes);
 app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
-    message: 'Sistema Circulatorio API está funcionando correctamente',
+    message: 'Los Sentidos API está funcionando correctamente',
     timestamp: new Date().toISOString(),
   });
 });
