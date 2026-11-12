@@ -39,17 +39,6 @@ async function migrateUsers() {
   }
 }
 
-async function createUser(data, password, log) {
-  const existing = await User.findOne({ documento: data.documento });
-  if (existing) {
-    console.log(`👤 ${log} ya existe`);
-    return;
-  }
-  const hashed = await bcrypt.hash(password, 10);
-  await User.create({ ...data, password: hashed });
-  console.log(`👤 ${log} creado (${data.documento} / ${password})`);
-}
-
 async function ensureUser(data, password, log) {
   const existing = await User.findOne({ documento: data.documento });
   const hashed = await bcrypt.hash(password, 10);
