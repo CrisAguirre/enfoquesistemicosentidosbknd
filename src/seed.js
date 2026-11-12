@@ -50,22 +50,38 @@ async function createUser(data, password, log) {
   console.log(`👤 ${log} creado (${data.documento} / ${password})`);
 }
 
+async function ensureUser(data, password, log) {
+  const existing = await User.findOne({ documento: data.documento });
+  const hashed = await bcrypt.hash(password, 10);
+  if (existing) {
+    await User.updateOne({ _id: existing._id }, { $set: { ...data, password: hashed } });
+    console.log(`🔄 ${log} actualizado (${data.documento} / ${password})`);
+    return;
+  }
+  await User.create({ ...data, password: hashed });
+  console.log(`👤 ${log} creado (${data.documento} / ${password})`);
+}
+
 async function seedUsers() {
   await migrateUsers();
 
-  await createUser(
-    { documento: 'admin', full_name: 'Administrador', role: 'admin' },
-    'SiCi@2026',
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminDoc = process.env.ADMIN_DOCUMENTO || 'admin';
+  const adminName = process.env.ADMIN_NAME || 'Docente Administrador';
+
+  await ensureUser(
+    { documento: adminDoc, full_name: adminName, role: 'admin' },
+    adminPassword,
     'Usuario admin'
   );
 
-  await createUser(
+  await ensureUser(
     { documento: 'profesor', full_name: 'Docente de Ciencias', role: 'teacher', grado: '8°' },
-    'SiCi@2026',
+    adminPassword,
     'Usuario profesor'
   );
 
-  await createUser(
+  await ensureUser(
     { documento: '1000000001', full_name: 'Estudiante Demo', role: 'student', edad: 13, grado: '8°' },
     'Estudiante2026',
     'Estudiante demo'
@@ -85,7 +101,7 @@ async function seedUsers() {
   ];
 
   for (const estudiante of estudiantes) {
-    await createUser(
+    await ensureUser(
       { documento: estudiante.documento, full_name: estudiante.full_name, role: 'student', edad: 13, grado: '8°' },
       estudiante.password,
       `Estudiante ${estudiante.documento}`
